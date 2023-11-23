@@ -19,9 +19,11 @@
       "name": "windows-msvc-base",
       "hidden": true,
       "inherits": "windows-base",
-      "cacheVariables": {
-        "CMAKE_CXX_COMPILER": "cl.exe"
-      },
+        "cacheVariables": {
+            "CMAKE_CXX_COMPILER": "cl.exe",
+            "BOOST_INCLUDEDIR": "D:\\DevEnvs\\CppLibs\\boost_1_83_0\\boost_1_83_0",
+            "BOOST_LIBRARYDIR": "D:\\DevEnvs\\CppLibs\\boost_1_83_0\\boost_1_83_0\\stage\\lib"
+        },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
           "intelliSenseMode": "windows-msvc-x64"
