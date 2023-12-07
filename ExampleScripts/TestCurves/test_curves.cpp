@@ -1,14 +1,14 @@
-#include <iostream>
-#include <cmath>
-#include <vector>
-#include <ql/termstructures/yield/flatforward.hpp>
 #include <ql/termstructures/yield/discountcurve.hpp>
+#include <ql/termstructures/yield/flatforward.hpp>
 #include <ql/termstructures/yield/zerocurve.hpp>
+#include <cmath>
+#include <iostream>
+#include <vector>
 
 using namespace QuantLib;
 
 int main() {
-	
+
     auto act365f = Actual365Fixed();
     auto valuation_date = Date(7, Dec, 2023);
     Settings::instance().evaluationDate() = valuation_date;
@@ -27,9 +27,9 @@ int main() {
 
     // create a flat forward curve
     double const_r = 0.05;
-	auto flat_foward_curve = FlatForward(reference_date, const_r, act365f, Continuous, Annual);
+    auto flat_foward_curve = FlatForward(reference_date, const_r, act365f, Continuous, Annual);
     auto oney_df = flat_foward_curve.discount(oney_date);
-        auto oney_df2 = exp(-const_r * oney_time);
+    auto oney_df2 = exp(-const_r * oney_time);
     std::cout << "curve discount: " << oney_df << ", manual discount" << oney_df2 << std::endl;
 
     auto oney_zr = flat_foward_curve.zeroRate(oney_date, act365f, Continuous, Annual, false);
@@ -38,12 +38,12 @@ int main() {
               << std::endl;
 
     // create a fake discounting curve
-    std::vector<Date> tenor_dates = {valuation_date, oney_date, twoy_date,threey_date};
+    std::vector<Date> tenor_dates = {valuation_date, oney_date, twoy_date, threey_date};
     std::vector<double> dfs = {1., 0.98, 0.95, 0.92};
     auto discount_curve = DiscountCurve(tenor_dates, dfs, act365f);
     auto dc_oney_df = discount_curve.discount(oneyhalf_date);
-    auto dc_oney_df2 =exp( log(dfs[1]) + (log(dfs[2]) - log(dfs[1])) / (twoy_time - oney_time) *
-                                         (oneyhalf_time - oney_time));
+    auto dc_oney_df2 = exp(log(dfs[1]) + (log(dfs[2]) - log(dfs[1])) / (twoy_time - oney_time) *
+                                             (oneyhalf_time - oney_time));
     std::cout << "dc curve discount: " << dc_oney_df << ", manual discount" << dc_oney_df2
               << std::endl;
 
@@ -59,12 +59,8 @@ int main() {
     std::cout << "twoy time zero rate manual: " << log(1 / dfs[2]) / twoy_time << std::endl;
 
     // create zero rate curve from dfs
-    std::vector<double> zrs = {
-        log(1 / dfs[1]) / oney_time,
-        log(1 / dfs[1]) / oney_time,
-        log(1 / dfs[2]) / twoy_time,
-        log(1 / dfs[3]) / threey_time
-    };
+    std::vector<double> zrs = {log(1 / dfs[1]) / oney_time, log(1 / dfs[1]) / oney_time,
+                               log(1 / dfs[2]) / twoy_time, log(1 / dfs[3]) / threey_time};
     auto zero_curve = InterpolatedZeroCurve<Linear>(tenor_dates, zrs, act365f);
     for (auto d : tenor_dates) {
         std::cout << "df from zero curve: " << zero_curve.discount(d)
@@ -75,14 +71,17 @@ int main() {
                   << ", zr from discounting curve: "
                   << discount_curve.zeroRate(d, act365f, Continuous) << std::endl;
     }
-    // for dates inbetween, dc and zc should give different results 
-    // since the log linear dc perform linear interpolation on -zrs*t whilt linear zc perform linear interpolation on zrs
+    // for dates inbetween, dc and zc should give different results
+    // since the log linear dc perform linear interpolation on -zrs*t whilt linear zc perform linear
+    // interpolation on zrs
     std::cout << "oney half df from zero curve: " << zero_curve.discount(oneyhalf_date)
-              << ", oney half df from discounting curve: " << discount_curve.discount(oneyhalf_date) << std::endl;
-
-    std::cout << "oney half zr from zero curve: " << zero_curve.zeroRate(oneyhalf_date, act365f, Continuous)
-              << ", oney half zr from discounting curve: " << discount_curve.zeroRate(oneyhalf_date, act365f, Continuous)
+              << ", oney half df from discounting curve: " << discount_curve.discount(oneyhalf_date)
               << std::endl;
-	std::cout << "DONE!" << std::endl;
+
+    std::cout << "oney half zr from zero curve: "
+              << zero_curve.zeroRate(oneyhalf_date, act365f, Continuous)
+              << ", oney half zr from discounting curve: "
+              << discount_curve.zeroRate(oneyhalf_date, act365f, Continuous) << std::endl;
+    std::cout << "DONE!" << std::endl;
     return 0;
 }
