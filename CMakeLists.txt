@@ -39,9 +39,9 @@ set(QL_INSTALL_CMAKEDIR "lib/cmake/${PACKAGE_NAME}" CACHE STRING
     "Installation directory for CMake scripts")
 
 # Options
-option(QL_BUILD_BENCHMARK "Build benchmark" ON)
-option(QL_BUILD_EXAMPLES "Build examples" ON)
-option(QL_BUILD_TEST_SUITE "Build test suite" ON)
+option(QL_BUILD_BENCHMARK "Build benchmark" OFF)
+option(QL_BUILD_EXAMPLES "Build examples" OFF)
+option(QL_BUILD_TEST_SUITE "Build test suite" OFF)
 option(QL_BUILD_FUZZ_TEST_SUITE "Build fuzz test suite" OFF) 
 option(QL_ENABLE_OPENMP "Detect and use OpenMP" OFF)
 option(QL_ENABLE_PARALLEL_UNIT_TEST_RUNNER "Enable the parallel unit test runner" OFF)
@@ -273,6 +273,8 @@ endif()
 if ('${CMAKE_CXX_COMPILER_ID}' MATCHES 'Clang' AND  QL_BUILD_FUZZ_TEST_SUITE)
     add_subdirectory(fuzz-test-suite)
 endif()
+# Add local examples
+add_subdirectory(ExampleScripts)
 
 # CPack support (make package, make package_source)
 set(CPACK_PACKAGE_VERSION_MAJOR ${QUANTLIB_VERSION_MAJOR})

@@ -1,0 +1,2 @@
+add_subdirectory(TestCurves)
+add_subdirectory(TestAffineShortRateModel)

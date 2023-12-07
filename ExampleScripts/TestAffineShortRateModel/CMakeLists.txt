@@ -1,0 +1,2 @@
+add_executable(TestAffineShortRateModel test_main.cpp)
+target_link_libraries(TestAffineShortRateModel ql_library ${QL_THREAD_LIBRARIES})
