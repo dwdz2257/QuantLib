@@ -104,10 +104,15 @@ jobs:
             tag: lunar
             cc: clang
             cxx: clang++
-            tests: true
           - name: "Clang 16"
             shortname: clang16
             tag: mantic
+            cc: clang
+            cxx: clang++
+            tests: true
+          - name: "Clang 17"
+            shortname: clang17
+            tag: noble
             cc: clang
             cxx: clang++
             tests: true
@@ -216,7 +221,7 @@ jobs:
       run: |
         ./autogen.sh
         ./configure --disable-static ${{ matrix.configureflags }} CC="ccache ${{ matrix.cc }}" CXX="ccache ${{ matrix.cxx }}" CXXFLAGS="-O2 -g0 -Wall -Wno-unknown-pragmas -Werror ${{ matrix.cxxflags }}"
-        make -j 2
+        make -j 4
     - name: Run tests
       if: ${{ matrix.tests }}
       run: |
